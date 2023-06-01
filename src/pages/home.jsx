@@ -43,7 +43,7 @@ export default function HomePage() {
             })
             .catch((error) => {
                 setLoading(false);
-                console.log("Erro:", error);
+                alert(`Erro: ${error}`);
             });
     }
     return (
@@ -69,7 +69,11 @@ export default function HomePage() {
                     onChange={(event) => setPassword(event.target.value)}
                     disabled={loading}
                 />
-                <button data-test="login-btn" onClick={requestLogin}>
+                <button
+                    data-test="login-btn"
+                    onClick={requestLogin}
+                    disabled={loading}
+                >
                     {loading ? (
                         <ThreeDots color="#FFFFFF" height={10} width={40} />
                     ) : (

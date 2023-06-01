@@ -103,7 +103,11 @@ export default function SignUp() {
                     onChange={(event) => setImage(event.target.value)}
                     disabled={loading}
                 />
-                <button data-test="signup-btn" onClick={requestLogin}>
+                <button
+                    data-test="signup-btn"
+                    onClick={requestLogin}
+                    disabled={loading}
+                >
                     {loading ? (
                         <ThreeDots color="#FFFFFF" height={10} width={40} />
                     ) : (
