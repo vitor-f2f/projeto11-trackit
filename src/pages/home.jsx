@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import logo from "../assets/logo.png";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
+import UserContext from "../UserContext";
 
 export default function HomePage() {
+    const { setUserData } = useContext(UserContext);
+
     const [userEmail, setEmail] = useState("");
     const [userPass, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const loginInfo = {
         email: "",
         password: "",
@@ -15,6 +21,7 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     function requestLogin() {
+        setLoading(true);
         loginInfo.email = userEmail;
         loginInfo.password = userPass;
         console.log(loginInfo);
@@ -22,17 +29,22 @@ export default function HomePage() {
             "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
             loginInfo
         );
-        promise.then((res) =>
-            navigate("/sucesso", {
-                state: {
+        promise
+            .then((res) => {
+                setLoading(false);
+                setUserData({
                     userId: res.data.id,
                     userName: res.data.name,
                     userImage: res.data.image,
-                    userEmail: { userEmail },
+                    userEmail: userEmail,
                     userToken: res.data.token,
-                },
+                });
+                navigate("/hoje");
             })
-        );
+            .catch((error) => {
+                setLoading(false);
+                console.log("Erro:", error);
+            });
     }
     return (
         <PageContainer>
@@ -47,6 +59,7 @@ export default function HomePage() {
                     placeholder="email"
                     value={userEmail}
                     onChange={(event) => setEmail(event.target.value)}
+                    disabled={loading}
                 />
                 <input
                     data-test="password-input"
@@ -54,9 +67,14 @@ export default function HomePage() {
                     placeholder="senha"
                     value={userPass}
                     onChange={(event) => setPassword(event.target.value)}
+                    disabled={loading}
                 />
                 <button data-test="login-btn" onClick={requestLogin}>
-                    Entrar
+                    {loading ? (
+                        <ThreeDots color="#FFFFFF" height={10} width={40} />
+                    ) : (
+                        "Entrar"
+                    )}
                 </button>
                 <Link
                     to={`/cadastro`}
@@ -97,6 +115,8 @@ const FormContainer = styled.div`
         margin-top: 19px;
     }
     button {
+        width: 100%;
+        text-decoration: none;
         background-color: #52b6ff;
     }
 `;

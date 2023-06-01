@@ -2,6 +2,7 @@ import styled from "styled-components";
 import logo from "../assets/logo.png";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
 
 export default function SignUp() {
@@ -9,6 +10,8 @@ export default function SignUp() {
     const [signupPass, setPassword] = useState("");
     const [signupImage, setImage] = useState("");
     const [signupName, setName] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const signupInfo = {
         email: "",
@@ -20,6 +23,7 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     function requestLogin() {
+        setLoading(true);
         signupInfo.email = signupEmail;
         signupInfo.password = signupPass;
         signupInfo.name = signupName;
@@ -29,8 +33,37 @@ export default function SignUp() {
             "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
             signupInfo
         );
-        promise.then((res) => navigate("/"));
+        promise
+            .then((res) => {
+                setLoading(false);
+                navigate("/");
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log(error);
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        setError("Esse email já está em uso.");
+                    } else {
+                        setError(error.response.data.error);
+                    }
+                } else if (error.request) {
+                    setError("Sem resposta da rede.");
+                } else {
+                    setError("Ocorreu um erro inesperado.");
+                }
+            });
     }
+    function errorAlert() {
+        if (error) {
+            alert(`Error: ${error}`);
+        }
+    }
+
+    useEffect(() => {
+        errorAlert();
+    }, [error]);
+
     return (
         <PageContainer>
             <Logo>
@@ -44,6 +77,7 @@ export default function SignUp() {
                     placeholder="email"
                     value={signupEmail}
                     onChange={(event) => setEmail(event.target.value)}
+                    disabled={loading}
                 />
                 <input
                     data-test="password-input"
@@ -51,6 +85,7 @@ export default function SignUp() {
                     placeholder="senha"
                     value={signupPass}
                     onChange={(event) => setPassword(event.target.value)}
+                    disabled={loading}
                 />
                 <input
                     data-test="user-name-input"
@@ -58,6 +93,7 @@ export default function SignUp() {
                     placeholder="nome"
                     value={signupName}
                     onChange={(event) => setName(event.target.value)}
+                    disabled={loading}
                 />
                 <input
                     data-test="user-image-input"
@@ -65,9 +101,14 @@ export default function SignUp() {
                     placeholder="foto"
                     value={signupImage}
                     onChange={(event) => setImage(event.target.value)}
+                    disabled={loading}
                 />
                 <button data-test="signup-btn" onClick={requestLogin}>
-                    Cadastrar
+                    {loading ? (
+                        <ThreeDots color="#FFFFFF" height={10} width={40} />
+                    ) : (
+                        "Cadastrar"
+                    )}
                 </button>
                 <Link to={`/`} className="signup-text" data-test="login-link">
                     Já tem uma conta? Faça login!
