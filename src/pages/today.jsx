@@ -55,20 +55,35 @@ export default function Today() {
             });
     }
 
+    const pctFeitos = () => {
+        if (!userData.habits || userData.habits.length === 0) {
+            return 0;
+        }
+
+        const habitosFeitos = userData.habits.filter((habit) => habit.done);
+        return (habitosFeitos.length / userData.habits.length) * 100;
+    };
+
     return (
         <TodayContainer>
             <>
                 <DayInfo data-test="today">
                     {dayjs().locale("pt-br").format("dddd, DD/MM")}
                 </DayInfo>
-                <DayProgress data-test="today-counter">
-                    Nenhum hábito concluído ainda
+                <DayProgress data-test="today-counter" pctFeitos={pctFeitos()}>
+                    {pctFeitos() == 0
+                        ? "Nenhum hábito concluído ainda"
+                        : `${pctFeitos()}% dos hábitos concluidos`}
                 </DayProgress>
             </>
-            <HabitsContainer data-test="today-habit-container">
+            <HabitsContainer>
                 {userData.habits
                     ? userData.habits.map((h) => (
-                          <HabitsItem key={h.id} done={h.done}>
+                          <HabitsItem
+                              data-test="today-habit-container"
+                              key={h.id}
+                              done={h.done}
+                          >
                               <div className="text-container">
                                   <div
                                       className="title"
@@ -171,7 +186,7 @@ const DayInfo = styled.div`
 `;
 
 const DayProgress = styled.div`
-    color: #bababa;
+    color: ${(props) => (props.pctFeitos > 0 ? "#8FC549" : "#bababa")};
     font-size: 18px;
     line-height: 30px;
 `;
