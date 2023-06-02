@@ -6,9 +6,9 @@ export default function TopBar() {
     const { userData } = useContext(UserContext);
     return (
         <>
-            <TopContainer>
+            <TopContainer data-test="header">
                 <span>TrackIt</span>
-                <img src={userData.userImage} alt="" />
+                <img src={userData.userImage} data-test="avatar" alt="" />
             </TopContainer>
         </>
     );

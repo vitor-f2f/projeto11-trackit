@@ -22,7 +22,7 @@ export default function App() {
 
 function AppContent() {
     const location = useLocation();
-    const hideNav = ["/", "/signup"].includes(location.pathname);
+    const hideNav = ["/", "/cadastro"].includes(location.pathname);
 
     return (
         <>
