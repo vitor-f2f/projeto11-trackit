@@ -6,16 +6,16 @@ const GlobalStyle = createGlobalStyle`
     a:focus { text-decoration: none; }
     a:active { text-decoration: none; }
     a {color: inherit;}
-    body {
+    body{
         font-family: 'Lexend Deca', sans-serif;
         font-style: normal;
         font-weight: 400;
+        box-sizing: border-box;
     }
 	button {
 		height: 45px;
 		border-radius: 5px;
 		border-style: none;
-		font-size: 21px;
 		display: flex;
 		align-items: center;
 		justify-content: center;

@@ -47,7 +47,7 @@ export default function HomePage() {
             });
     }
     return (
-        <PageContainer>
+        <HomeContainer>
             <Logo>
                 <img src={logo} alt="" />
             </Logo>
@@ -88,11 +88,11 @@ export default function HomePage() {
                     Não tem uma conta? Cadastre-se!
                 </Link>
             </FormContainer>
-        </PageContainer>
+        </HomeContainer>
     );
 }
 
-const PageContainer = styled.div`
+const HomeContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -122,5 +122,6 @@ const FormContainer = styled.div`
         width: 100%;
         text-decoration: none;
         background-color: #52b6ff;
+        font-size: 21px;
     }
 `;

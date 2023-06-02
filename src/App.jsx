@@ -6,6 +6,7 @@ import HomePage from "./pages/home";
 import SignUp from "./pages/signup";
 import Today from "./pages/today";
 import NavBar from "./assets/NavBar.jsx";
+import TopBar from "./assets/TopBar.jsx";
 
 export default function App() {
     const [userData, setUserData] = useState(null);
@@ -25,12 +26,13 @@ function AppContent() {
 
     return (
         <>
-            {!hideNav && <NavBar />}
+            {!hideNav && <TopBar />}
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/cadastro" element={<SignUp />} />
                 <Route path="/hoje" element={<Today />} />
             </Routes>
+            {!hideNav && <NavBar />}
         </>
     );
 }
