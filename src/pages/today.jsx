@@ -178,7 +178,7 @@ const TodayItem = styled.div`
 
     button {
         height: 69px;
-        width: 69px;
+        min-width: 69px;
         cursor: pointer;
         background-color: ${(props) => (props.done ? "#8FC549" : "#ebebeb")};
     }

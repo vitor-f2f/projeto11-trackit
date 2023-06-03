@@ -1,6 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+    * {
+        box-sizing: border-box;
+    }
     a:visited { text-decoration: none; }
     a:hover { text-decoration: none; }
     a:focus { text-decoration: none; }
@@ -25,9 +28,6 @@ const GlobalStyle = createGlobalStyle`
 		text-align: center;
 		color: #FFFFFF;
         font-family: 'Lexend Deca', sans-serif;
-		&:disabled {
-			background-color: lightgray;
-		}
 	}
 	input {
 		background: #FFFFFF;

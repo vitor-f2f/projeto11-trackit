@@ -48,11 +48,14 @@ export default function Habits() {
         }
     }
 
-    function cancelFunc() {
+    function clickFunc() {
         setCriando(false);
         setNewName("");
         setNewDays([]);
     }
+
+    function createNew() {}
+
     return (
         <HabitsContainer>
             <PageTitle>
@@ -81,6 +84,7 @@ export default function Habits() {
                             {[0, 1, 2, 3, 4, 5, 6].map((n) => (
                                 <Day
                                     key={n}
+                                    active={newHabitDays.includes(n)}
                                     onClick={() => selectDays(n)}
                                     data-test="habit-day"
                                 >
@@ -93,7 +97,7 @@ export default function Habits() {
                                 className="cancel"
                                 data-test=""
                                 disabled={loading}
-                                onClick={cancelFunc}
+                                onClick={clickFunc}
                             >
                                 Cancelar
                             </button>
@@ -159,7 +163,7 @@ const HabitsContainer = styled.div`
     text-align: left;
     color: #293845;
     min-height: 100vh;
-    max-width: 100%;
+    padding-bottom: 100px;
     background-color: #f2f2f2;
 `;
 
@@ -192,9 +196,9 @@ const NewHabitForm = styled.div`
     margin-bottom: 25px;
     input {
         background-color: ${({ loading }) =>
-            loading == "true" ? "#f2f2f2" : "#ffffff"};
-        color: ${({ loading }) => (loading == "true" ? "#afafaf" : "#000000")};
-        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+            loading === "true" ? "#f2f2f2" : "#ffffff"};
+        color: ${({ loading }) => (loading === "true" ? "#afafaf" : "#000000")};
+        opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         border-color: #d4d4d4;
         margin-bottom: 8px;
     }
@@ -207,7 +211,7 @@ const NewHabitButtons = styled.div`
     margin-top: 29px;
     gap: 10px;
     button.save {
-        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+        opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         text-decoration: none;
         background-color: #52b6ff;
         width: 84px;
@@ -215,7 +219,7 @@ const NewHabitButtons = styled.div`
         font-size: 16px;
     }
     button.cancel {
-        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+        opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         color: #52b6ff;
         text-decoration: none;
         background-color: #ffffff;
@@ -267,8 +271,8 @@ const Day = styled.div`
     width: 28px;
     height: 28px;
     color: ${(props) => (props.active ? "#ffffff" : "#d4d4d4")};
-    background-color: ${(props) => (props.active ? "#d4d4d4" : "#ffffff")};
-    border: 1px solid ${(props) => (props.active ? "#ffffff" : "#d4d4d4")};
+    background-color: ${(props) => (props.active ? "#cfcfcf" : "#ffffff")};
+    border: 1px solid ${(props) => (props.active ? "#cfcfcf" : "#d4d4d4")};
     border-radius: 5px;
     display: flex;
     align-items: center;
