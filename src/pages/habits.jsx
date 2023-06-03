@@ -53,8 +53,49 @@ export default function Habits() {
         setNewName("");
         setNewDays([]);
     }
+    const newHabitObj = {
+        name: "",
+        days: [],
+    };
+    function createNew() {
+        setLoading(true);
+        newHabitObj.name = newName;
+        newHabitObj.days = newHabitDays;
+        console.log(newHabitObj);
+        if (newHabitObj.name == "" || newHabitObj.days.length == 0) {
+            alert("Complete as informações do novo hábito.");
+            setLoading(false);
+            return;
+        }
 
-    function createNew() {}
+        const promise = axios.post(
+            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+            newHabitObj,
+            tokenObj
+        );
+        promise
+            .then(() => {
+                setLoading(false);
+                clickFunc();
+                requestHabits();
+                return;
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log(error);
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        setError("Esse email já está em uso.");
+                    } else {
+                        setError(error.response.data.error);
+                    }
+                } else if (error.request) {
+                    setError("Sem resposta da rede.");
+                } else {
+                    setError("Ocorreu um erro inesperado.");
+                }
+            });
+    }
 
     return (
         <HabitsContainer>
@@ -95,16 +136,17 @@ export default function Habits() {
                         <NewHabitButtons>
                             <button
                                 className="cancel"
-                                data-test=""
                                 disabled={loading}
                                 onClick={clickFunc}
+                                data-test="habit-create-cancel-btn"
                             >
                                 Cancelar
                             </button>
                             <button
                                 className="save"
-                                data-test=""
                                 disabled={loading}
+                                onClick={createNew}
+                                data-test="habit-create-save-btn"
                             >
                                 {loading ? (
                                     <ThreeDots
@@ -163,7 +205,7 @@ const HabitsContainer = styled.div`
     text-align: left;
     color: #293845;
     min-height: 100vh;
-    padding-bottom: 100px;
+    max-width: 100%;
     background-color: #f2f2f2;
 `;
 
@@ -237,6 +279,9 @@ const HabitsList = styled.div`
     p {
         font-size: 18px;
         color: #666666;
+    }
+    > :last-child {
+        margin-bottom: 15px;
     }
 `;
 

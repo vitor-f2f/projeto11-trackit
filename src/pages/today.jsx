@@ -151,6 +151,9 @@ const TodayList = styled.div`
     flex-direction: column;
     gap: 10px;
     margin-top: 28px;
+    > :last-child {
+        margin-bottom: 15px;
+    }
 `;
 
 const TodayItem = styled.div`
