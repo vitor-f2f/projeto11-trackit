@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./pages/home";
 import SignUp from "./pages/signup";
 import Today from "./pages/today";
+import Habits from "./pages/habits";
 import NavBar from "./assets/NavBar.jsx";
 import TopBar from "./assets/TopBar.jsx";
 
@@ -31,6 +32,7 @@ function AppContent() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/cadastro" element={<SignUp />} />
                 <Route path="/hoje" element={<Today />} />
+                <Route path="/habitos" element={<Habits />} />
             </Routes>
             {!hideNav && <NavBar />}
         </>

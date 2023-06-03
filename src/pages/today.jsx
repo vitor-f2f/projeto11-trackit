@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -23,8 +22,8 @@ export default function Today() {
         promise
             .then((res) => {
                 setLoading(false);
-                const habitsArr = res.data;
-                setUserData({ ...userData, habits: habitsArr });
+                const todayHabitsArr = res.data;
+                setUserData({ ...userData, todayHabits: todayHabitsArr });
             })
             .catch((error) => {
                 setLoading(false);
@@ -34,11 +33,11 @@ export default function Today() {
     useEffect(() => {
         requestToday();
     }, []);
-    console.log(userData.habits);
+    console.log(userData.todayHabits);
 
     function toggleHabit(habitId, done) {
         const promise = axios.post(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/todayHabits/${habitId}/${
                 done ? "uncheck" : "check"
             }`,
             {},
@@ -56,30 +55,35 @@ export default function Today() {
     }
 
     const pctFeitos = () => {
-        if (!userData.habits || userData.habits.length === 0) {
+        if (!userData.todayHabits || userData.todayHabits.length === 0) {
             return 0;
         }
 
-        const habitosFeitos = userData.habits.filter((habit) => habit.done);
-        return (habitosFeitos.length / userData.habits.length) * 100;
+        const habitosFeitos = userData.todayHabits.filter(
+            (habit) => habit.done
+        );
+        return (habitosFeitos.length / userData.todayHabits.length) * 100;
     };
 
     return (
         <TodayContainer>
             <>
-                <DayInfo data-test="today">
+                <TodayInfo data-test="today">
                     {dayjs().locale("pt-br").format("dddd, DD/MM")}
-                </DayInfo>
-                <DayProgress data-test="today-counter" pctFeitos={pctFeitos()}>
+                </TodayInfo>
+                <TodayProgress
+                    data-test="today-counter"
+                    pctFeitos={pctFeitos()}
+                >
                     {pctFeitos() == 0
                         ? "Nenhum hábito concluído ainda"
                         : `${pctFeitos()}% dos hábitos concluidos`}
-                </DayProgress>
+                </TodayProgress>
             </>
-            <HabitsContainer>
-                {userData.habits
-                    ? userData.habits.map((h) => (
-                          <HabitsItem
+            <TodayList>
+                {userData.todayHabits
+                    ? userData.todayHabits.map((h) => (
+                          <TodayItem
                               data-test="today-habit-container"
                               key={h.id}
                               done={h.done}
@@ -122,10 +126,10 @@ export default function Today() {
                               >
                                   <img src={checkMark} alt="" />
                               </button>
-                          </HabitsItem>
+                          </TodayItem>
                       ))
                     : "..."}
-            </HabitsContainer>
+            </TodayList>
         </TodayContainer>
     );
 }
@@ -141,14 +145,14 @@ const TodayContainer = styled.div`
     background-color: #f2f2f2;
 `;
 
-const HabitsContainer = styled.div`
+const TodayList = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 28px;
 `;
 
-const HabitsItem = styled.div`
+const TodayItem = styled.div`
     display: flex;
     justify-content: space-between;
     background-color: white;
@@ -179,13 +183,13 @@ const HabitsItem = styled.div`
     }
 `;
 
-const DayInfo = styled.div`
+const TodayInfo = styled.div`
     color: #126ba5;
     font-size: 23px;
     text-transform: capitalize;
 `;
 
-const DayProgress = styled.div`
+const TodayProgress = styled.div`
     color: ${(props) => (props.pctFeitos > 0 ? "#8FC549" : "#bababa")};
     font-size: 18px;
     line-height: 30px;
