@@ -32,6 +32,7 @@ export default function Habits() {
             .catch((error) => {
                 alert(`Erro: ${error}`);
             });
+        return;
     }
 
     useEffect(() => {
@@ -83,17 +84,23 @@ export default function Habits() {
             .catch((error) => {
                 setLoading(false);
                 console.log(error);
-                if (error.response) {
-                    if (error.response.status === 409) {
-                        setError("Esse email já está em uso.");
-                    } else {
-                        setError(error.response.data.error);
-                    }
-                } else if (error.request) {
-                    setError("Sem resposta da rede.");
-                } else {
-                    setError("Ocorreu um erro inesperado.");
-                }
+                return;
+            });
+    }
+
+    function deleteHabit(id) {
+        const promise = axios.delete(
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
+            tokenObj
+        );
+        promise
+            .then(() => {
+                requestHabits();
+                return;
+            })
+            .catch((error) => {
+                console.log(error);
+                return;
             });
     }
 
@@ -181,6 +188,7 @@ export default function Habits() {
                             <button
                                 className="delete"
                                 data-test="habit-delete-btn"
+                                onClick={() => deleteHabit(h.id)}
                             >
                                 <img src={deleteBtn} alt="" />
                             </button>
