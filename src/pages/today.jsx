@@ -33,24 +33,25 @@ export default function Today() {
     useEffect(() => {
         requestToday();
     }, []);
-    console.log(userData.todayHabits);
+    console.log("today habits: ", userData.todayHabits);
 
     function toggleHabit(habitId, done) {
         const promise = axios.post(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/todayHabits/${habitId}/${
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${
                 done ? "uncheck" : "check"
             }`,
             {},
             tokenObj
         );
+
         requestToday();
         promise
             .then((res) => {
-                console.log("Sucesso:", res.data);
+                console.log("Sucesso: ", res.data);
                 requestToday();
             })
             .catch((error) => {
-                console.log(error);
+                console.log("Erro: ", error);
             });
     }
 

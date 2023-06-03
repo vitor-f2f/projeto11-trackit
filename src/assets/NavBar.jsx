@@ -44,6 +44,7 @@ const NavContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
     .bar-text {
         cursor: pointer;
         color: #52b6ff;

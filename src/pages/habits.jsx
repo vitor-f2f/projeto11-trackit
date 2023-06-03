@@ -1,5 +1,5 @@
-import { useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -10,6 +10,9 @@ import deleteBtn from "../assets/dump.svg";
 
 export default function Habits() {
     const { userData, setUserData } = useContext(UserContext);
+    const [criandoNovo, setCriando] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [newHabitDays, setNewDays] = useState([]);
     const [loading, setLoading] = useState(false);
     const userToken = userData.userToken;
     const tokenObj = {
@@ -17,19 +20,16 @@ export default function Habits() {
     };
 
     function requestHabits() {
-        setLoading(true);
         const promise = axios.get(
             "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
             tokenObj
         );
         promise
             .then((res) => {
-                setLoading(false);
                 const allHabitsArr = res.data;
                 setUserData({ ...userData, allHabits: allHabitsArr });
             })
             .catch((error) => {
-                setLoading(false);
                 alert(`Erro: ${error}`);
             });
     }
@@ -37,48 +37,115 @@ export default function Habits() {
     useEffect(() => {
         requestHabits();
     }, []);
-    console.log(userData.allHabits);
+
     const diaLetra = ["D", "S", "T", "Q", "Q", "S", "S"];
+
+    function selectDays(day) {
+        if (newHabitDays.includes(day)) {
+            setNewDays(newHabitDays.filter((id) => id !== day));
+        } else {
+            setNewDays([...newHabitDays, day]);
+        }
+    }
+
+    function cancelFunc() {
+        setCriando(false);
+        setNewName("");
+        setNewDays([]);
+    }
     return (
         <HabitsContainer>
             <PageTitle>
                 <span>Meus hábitos</span>
-                <button className="new-habit">
-                    <img
-                        src={plusSymbol}
-                        alt="mais"
-                        data-test="habit-create-btn"
-                    />
+                <button
+                    className="new-habit"
+                    onClick={() => setCriando(true)}
+                    data-test="habit-create-btn"
+                >
+                    <img src={plusSymbol} alt="mais" />
                 </button>
             </PageTitle>
 
             <HabitsList>
-                {userData.allHabits
-                    ? userData.allHabits.map((h) => (
-                          <HabitsItem data-test="habit-container" key={h.id}>
-                              <div className="title" data-test="habit-name">
-                                  {h.name}
-                              </div>
-                              <HabitsDays>
-                                  {[0, 1, 2, 3, 4, 5, 6].map((n) => (
-                                      <Day
-                                          key={n}
-                                          active={h.days.includes(n)}
-                                          data-test="habit-day"
-                                      >
-                                          {diaLetra[n]}
-                                      </Day>
-                                  ))}
-                              </HabitsDays>
-                              <button
-                                  className="delete"
-                                  data-test="habit-delete-btn"
-                              >
-                                  <img src={deleteBtn} alt="" />
-                              </button>
-                          </HabitsItem>
-                      ))
-                    : "..."}
+                {criandoNovo && (
+                    <NewHabitForm data-test="habit-create-container">
+                        <input
+                            data-test="habit-name-input"
+                            type="text"
+                            placeholder="nome do hábito"
+                            value={newName}
+                            onChange={(event) => setNewName(event.target.value)}
+                            disabled={loading}
+                        />
+                        <HabitsDays>
+                            {[0, 1, 2, 3, 4, 5, 6].map((n) => (
+                                <Day
+                                    key={n}
+                                    onClick={() => selectDays(n)}
+                                    data-test="habit-day"
+                                >
+                                    {diaLetra[n]}
+                                </Day>
+                            ))}
+                        </HabitsDays>
+                        <NewHabitButtons>
+                            <button
+                                className="cancel"
+                                data-test=""
+                                disabled={loading}
+                                onClick={cancelFunc}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="save"
+                                data-test=""
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <ThreeDots
+                                        color="#FFFFFF"
+                                        height={11}
+                                        width={43}
+                                    />
+                                ) : (
+                                    "Salvar"
+                                )}
+                            </button>
+                        </NewHabitButtons>
+                    </NewHabitForm>
+                )}
+                {userData.allHabits && userData.allHabits.length > 0 ? (
+                    userData.allHabits.map((h) => (
+                        <HabitsItem data-test="habit-container" key={h.id}>
+                            <div className="title" data-test="habit-name">
+                                {h.name}
+                            </div>
+                            <HabitsDays>
+                                {[0, 1, 2, 3, 4, 5, 6].map((n) => (
+                                    <Day
+                                        key={n}
+                                        active={h.days.includes(n)}
+                                        data-test="habit-day"
+                                    >
+                                        {diaLetra[n]}
+                                    </Day>
+                                ))}
+                            </HabitsDays>
+                            <button
+                                className="delete"
+                                data-test="habit-delete-btn"
+                            >
+                                <img src={deleteBtn} alt="" />
+                            </button>
+                        </HabitsItem>
+                    ))
+                ) : (
+                    <p>
+                        Você não tem nenhum hábito cadastrado ainda. Adicione um
+                        hábito para começar a trackear!
+                    </p>
+                )}
             </HabitsList>
         </HabitsContainer>
     );
@@ -116,11 +183,57 @@ const PageTitle = styled.div`
     }
 `;
 
+const NewHabitForm = styled.div`
+    position: relative;
+    background-color: white;
+    border-radius: 5px;
+    color: #666666;
+    padding: 18px;
+    margin-bottom: 25px;
+    input {
+        background-color: ${({ loading }) =>
+            loading == "true" ? "#f2f2f2" : "#ffffff"};
+        color: ${({ loading }) => (loading == "true" ? "#afafaf" : "#000000")};
+        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+        border-color: #d4d4d4;
+        margin-bottom: 8px;
+    }
+`;
+
+const NewHabitButtons = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-top: 29px;
+    gap: 10px;
+    button.save {
+        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+        text-decoration: none;
+        background-color: #52b6ff;
+        width: 84px;
+        height: 35px;
+        font-size: 16px;
+    }
+    button.cancel {
+        opacity: ${({ loading }) => (loading == "true" ? "0.7" : "1")};
+        color: #52b6ff;
+        text-decoration: none;
+        background-color: #ffffff;
+        width: 84px;
+        height: 35px;
+        font-size: 16px;
+    }
+`;
+
 const HabitsList = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 20px;
+    p {
+        font-size: 18px;
+        color: #666666;
+    }
 `;
 
 const HabitsItem = styled.div`

@@ -8,7 +8,6 @@ import UserContext from "../UserContext";
 
 export default function HomePage() {
     const { setUserData } = useContext(UserContext);
-
     const [userEmail, setEmail] = useState("");
     const [userPass, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -52,7 +51,7 @@ export default function HomePage() {
                 <img src={logo} alt="" />
             </Logo>
 
-            <FormContainer>
+            <FormContainer loading={loading.toString()}>
                 <input
                     data-test="email-input"
                     type="text"
@@ -75,7 +74,7 @@ export default function HomePage() {
                     disabled={loading}
                 >
                     {loading ? (
-                        <ThreeDots color="#FFFFFF" height={10} width={40} />
+                        <ThreeDots color="#FFFFFF" height={13} width={50} />
                     ) : (
                         "Entrar"
                     )}
@@ -118,7 +117,15 @@ const FormContainer = styled.div`
         text-decoration: underline;
         margin-top: 19px;
     }
+    input {
+        background-color: ${({ loading }) =>
+            loading === "true" ? "#f2f2f2" : "#ffffff"};
+        color: ${({ loading }) => (loading === "true" ? "#afafaf" : "#000000")};
+        opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
+        border-color: #d4d4d4;
+    }
     button {
+        opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         width: 100%;
         text-decoration: none;
         background-color: #52b6ff;

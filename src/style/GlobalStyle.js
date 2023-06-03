@@ -5,7 +5,10 @@ const GlobalStyle = createGlobalStyle`
     a:hover { text-decoration: none; }
     a:focus { text-decoration: none; }
     a:active { text-decoration: none; }
-    a {color: inherit;}
+    a { 
+        color: inherit;
+        text-decoration: none;
+    }
     body{
         font-family: 'Lexend Deca', sans-serif;
         font-style: normal;
@@ -21,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
 		justify-content: center;
 		text-align: center;
 		color: #FFFFFF;
+        font-family: 'Lexend Deca', sans-serif;
 		&:disabled {
 			background-color: lightgray;
 		}
@@ -32,7 +36,9 @@ const GlobalStyle = createGlobalStyle`
 		height: 43px;
 		font-size: 20px;
 		display: flex;
+        padding-left: 10px;
 		align-items: center;
+        font-family: 'Lexend Deca', sans-serif;
 		&::placeholder{
 			color: #d4d4d4;
 		}
