@@ -89,19 +89,23 @@ export default function Habits() {
     }
 
     function deleteHabit(id) {
-        const promise = axios.delete(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
-            tokenObj
-        );
-        promise
-            .then(() => {
-                requestHabits();
-                return;
-            })
-            .catch((error) => {
-                console.log(error);
-                return;
-            });
+        if (window.confirm("Tem certeza de que quer deletar este hábito?")) {
+            const promise = axios.delete(
+                `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
+                tokenObj
+            );
+            promise
+                .then(() => {
+                    requestHabits();
+                    return;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
+        } else {
+            return;
+        }
     }
 
     return (
@@ -135,6 +139,7 @@ export default function Habits() {
                                     active={newHabitDays.includes(n)}
                                     onClick={() => selectDays(n)}
                                     data-test="habit-day"
+                                    disabled={loading}
                                 >
                                     {diaLetra[n]}
                                 </Day>

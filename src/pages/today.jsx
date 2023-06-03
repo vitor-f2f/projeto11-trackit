@@ -169,14 +169,11 @@ const TodayItem = styled.div`
         line-height: 25px;
     }
     .current,
-    .record {
-        font-size: 13px;
-        line-height: 16px;
-        span {
-            color: ${(props) => (props.done ? "#8FC549" : "#666666")};
-        }
-    }
-    .record {
+    .record span {
+        color: ${(props) =>
+            props.done && props.currentSequence === props.highestSequence
+                ? "#8FC549"
+                : "#666666"};
     }
 
     button {
