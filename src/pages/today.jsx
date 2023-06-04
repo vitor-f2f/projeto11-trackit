@@ -184,7 +184,9 @@ const TodayItem = styled.div`
         padding-bottom: 7px;
         line-height: 25px;
     }
-    .current span,
+    .current span {
+        color: ${(props) => (props.done ? "#8FC549" : "#666666")};
+    }
     .record span {
         color: ${(props) =>
             props.done && props.currentSequence === props.highestSequence
