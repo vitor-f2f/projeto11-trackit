@@ -6,6 +6,7 @@ import HomePage from "./pages/home";
 import SignUp from "./pages/signup";
 import Today from "./pages/today";
 import Habits from "./pages/habits";
+import History from "./pages/history";
 import NavBar from "./assets/NavBar.jsx";
 import TopBar from "./assets/TopBar.jsx";
 
@@ -33,6 +34,7 @@ function AppContent() {
                 <Route path="/cadastro" element={<SignUp />} />
                 <Route path="/hoje" element={<Today />} />
                 <Route path="/habitos" element={<Habits />} />
+                <Route path="/historico" element={<History />} />
             </Routes>
             {!hideNav && <NavBar />}
         </>

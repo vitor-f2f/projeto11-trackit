@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import UserContext from "../UserContext";
 
 export default function NavBar() {
+    const { userData } = useContext(UserContext);
+    const donepct = userData.donepct || 0;
+
     return (
         <>
             <NavContainer data-test="menu">
@@ -15,7 +21,22 @@ export default function NavBar() {
                 </Link>
                 <BarButton>
                     <Link to={`/hoje`} data-test="today-link">
-                        Hoje
+                        <ProgBar>
+                            <CircularProgressbar
+                                value={donepct}
+                                text="Hoje"
+                                strokeWidth={10}
+                                styles={{
+                                    root: { width: "79px", height: "79px" },
+                                    path: {
+                                        stroke: "#FFFFFF",
+                                        strokeLinecap: "round",
+                                    },
+                                    trail: { stroke: "#52b6ff" },
+                                    text: { fill: "#FFFFFF", fontSize: "24px" },
+                                }}
+                            ></CircularProgressbar>
+                        </ProgBar>
                     </Link>
                 </BarButton>
                 <Link
@@ -60,7 +81,22 @@ const BarButton = styled.button`
     height: 91px;
     margin-bottom: 42px;
     border-radius: 91px;
-    font-size: 18px;
     background-color: #52b6ff;
     color: white;
+    border: none;
+    padding: 0;
+    position: relative;
+
+    a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+`;
+
+const ProgBar = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;

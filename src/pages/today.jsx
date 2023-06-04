@@ -13,6 +13,7 @@ export default function Today() {
     const tokenObj = {
         headers: { Authorization: `Bearer ${userToken}` },
     };
+
     function requestToday() {
         setLoading(true);
         const promise = axios.get(
@@ -30,10 +31,10 @@ export default function Today() {
                 alert(`Erro: ${error}`);
             });
     }
+
     useEffect(() => {
         requestToday();
     }, []);
-    console.log("today habits: ", userData.todayHabits);
 
     function toggleHabit(habitId, done) {
         const promise = axios.post(
@@ -44,7 +45,6 @@ export default function Today() {
             tokenObj
         );
 
-        requestToday();
         promise
             .then((res) => {
                 console.log("Sucesso: ", res.data);
@@ -55,16 +55,26 @@ export default function Today() {
             });
     }
 
-    const pctFeitos = () => {
+    const calculatePercentage = () => {
         if (!userData.todayHabits || userData.todayHabits.length === 0) {
             return 0;
         }
 
-        const habitosFeitos = userData.todayHabits.filter(
+        const completedHabits = userData.todayHabits.filter(
             (habit) => habit.done
         );
-        return (habitosFeitos.length / userData.todayHabits.length) * 100;
+        const percentage = Math.round(
+            (completedHabits.length / userData.todayHabits.length) * 100
+        );
+
+        return percentage;
     };
+
+    const donePercentage = calculatePercentage();
+
+    useEffect(() => {
+        setUserData({ ...userData, donepct: donePercentage });
+    }, [userData.todayHabits]);
 
     return (
         <TodayContainer>
@@ -74,11 +84,11 @@ export default function Today() {
                 </TodayInfo>
                 <TodayProgress
                     data-test="today-counter"
-                    pctFeitos={pctFeitos()}
+                    pctFeitos={userData.donepct}
                 >
-                    {pctFeitos() == 0
+                    {userData.donepct === 0
                         ? "Nenhum hábito concluído ainda"
-                        : `${pctFeitos()}% dos hábitos concluidos`}
+                        : `${userData.donepct}% dos hábitos concluídos`}
                 </TodayProgress>
             </>
             <TodayList>
@@ -88,6 +98,8 @@ export default function Today() {
                               data-test="today-habit-container"
                               key={h.id}
                               done={h.done}
+                              currentSequence={h.currentSequence}
+                              highestSequence={h.highestSequence}
                           >
                               <div className="text-container">
                                   <div
@@ -103,7 +115,7 @@ export default function Today() {
                                       Sequência atual:{" "}
                                       <span>
                                           {h.currentSequence}{" "}
-                                          {h.currentSequence == 1
+                                          {h.currentSequence === 1
                                               ? `dia`
                                               : `dias`}
                                       </span>
@@ -115,7 +127,7 @@ export default function Today() {
                                       Seu recorde:{" "}
                                       <span>
                                           {h.highestSequence}{" "}
-                                          {h.highestSequence == 1
+                                          {h.highestSequence === 1
                                               ? `dia`
                                               : `dias`}
                                       </span>
@@ -134,6 +146,7 @@ export default function Today() {
         </TodayContainer>
     );
 }
+
 const TodayContainer = styled.div`
     padding: 100px 18px;
     display: flex;
@@ -163,12 +176,14 @@ const TodayItem = styled.div`
     border-radius: 5px;
     color: #666666;
     padding: 13px;
+    font-size: 13px;
+    line-height: 16px;
     .title {
         font-size: 20px;
         padding-bottom: 7px;
         line-height: 25px;
     }
-    .current,
+    .current span,
     .record span {
         color: ${(props) =>
             props.done && props.currentSequence === props.highestSequence
