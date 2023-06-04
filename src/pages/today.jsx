@@ -34,6 +34,7 @@ export default function Today() {
 
     useEffect(() => {
         requestToday();
+        console.log(userData);
     }, []);
 
     function toggleHabit(habitId, done) {
@@ -55,7 +56,7 @@ export default function Today() {
             });
     }
 
-    const calculatePercentage = () => {
+    const calculatePct = () => {
         if (!userData.todayHabits || userData.todayHabits.length === 0) {
             return 0;
         }
@@ -70,10 +71,10 @@ export default function Today() {
         return percentage;
     };
 
-    const donePercentage = calculatePercentage();
+    const donePct = calculatePct();
 
     useEffect(() => {
-        setUserData({ ...userData, donepct: donePercentage });
+        setUserData({ ...userData, donepct: donePct });
     }, [userData.todayHabits]);
 
     return (

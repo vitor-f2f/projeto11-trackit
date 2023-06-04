@@ -62,7 +62,7 @@ export default function Habits() {
         setLoading(true);
         newHabitObj.name = newName;
         newHabitObj.days = newHabitDays;
-        console.log(newHabitObj);
+        console.log("userData pre-criacao: ", userData);
         if (newHabitObj.name == "" || newHabitObj.days.length == 0) {
             alert("Complete as informações do novo hábito.");
             setLoading(false);
@@ -79,6 +79,7 @@ export default function Habits() {
                 setLoading(false);
                 clickFunc();
                 requestHabits();
+                console.log("userData pos-criacao: ", userData);
                 return;
             })
             .catch((error) => {
