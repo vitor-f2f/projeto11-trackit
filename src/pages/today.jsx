@@ -76,12 +76,18 @@ export default function Today() {
     useEffect(() => {
         setUserData({ ...userData, donepct: donePct });
     }, [userData.todayHabits]);
+    const dataDDDD = dayjs()
+        .locale("pt-br")
+        .format("dddd")
+        .replace(/-feira$/, "");
+
+    const dataDDMM = dayjs().locale("pt-br").format("DD/MM");
 
     return (
         <TodayContainer>
             <>
                 <TodayInfo data-test="today">
-                    {dayjs().locale("pt-br").format("dddd, DD/MM")}
+                    {dataDDDD}, {dataDDMM}
                 </TodayInfo>
                 <TodayProgress
                     data-test="today-counter"
