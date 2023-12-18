@@ -34,18 +34,15 @@ export default function Today() {
 
     useEffect(() => {
         requestToday();
-        console.log(userData);
     }, []);
 
     function toggleHabit(habitId, done) {
         const promise = axios.post(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${
-                done ? "uncheck" : "check"
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"
             }`,
             {},
             tokenObj
         );
-
         promise
             .then((res) => {
                 console.log("Sucesso: ", res.data);
@@ -56,7 +53,7 @@ export default function Today() {
             });
     }
 
-    const calculatePct = () => {
+    const calculatePercentage = () => {
         if (!userData.todayHabits || userData.todayHabits.length === 0) {
             return 0;
         }
@@ -71,10 +68,10 @@ export default function Today() {
         return percentage;
     };
 
-    const donePct = calculatePct();
+    const dayProgress = calculatePercentage();
 
     useEffect(() => {
-        setUserData({ ...userData, donepct: donePct });
+        setUserData({ ...userData, dayProgress: dayProgress });
     }, [userData.todayHabits]);
     const dataDDDD = dayjs()
         .locale("pt-br")
@@ -89,65 +86,65 @@ export default function Today() {
                 <TodayInfo data-test="today">
                     {dataDDDD}, {dataDDMM}
                 </TodayInfo>
-                <TodayProgress
+                <ProgressInfo
                     data-test="today-counter"
-                    pctFeitos={userData.donepct}
+                    dayProgress={userData.dayProgress}
                 >
-                    {userData.donepct === 0
+                    {userData.dayProgress === 0
                         ? "Nenhum hábito concluído ainda"
-                        : `${userData.donepct}% dos hábitos concluídos`}
-                </TodayProgress>
+                        : `${userData.dayProgress}% dos hábitos concluídos`}
+                </ProgressInfo>
             </>
             <TodayList>
                 {userData.todayHabits
                     ? userData.todayHabits.map((h) => (
-                          <TodayItem
-                              data-test="today-habit-container"
-                              key={h.id}
-                              done={h.done}
-                              currentSequence={h.currentSequence}
-                              highestSequence={h.highestSequence}
-                          >
-                              <div className="text-container">
-                                  <div
-                                      className="title"
-                                      data-test="today-habit-name"
-                                  >
-                                      {h.name}
-                                  </div>
-                                  <div
-                                      className="current"
-                                      data-test="today-habit-sequence"
-                                  >
-                                      Sequência atual:{" "}
-                                      <span>
-                                          {h.currentSequence}{" "}
-                                          {h.currentSequence === 1
-                                              ? `dia`
-                                              : `dias`}
-                                      </span>
-                                  </div>
-                                  <div
-                                      className="record"
-                                      data-test="today-habit-record"
-                                  >
-                                      Seu recorde:{" "}
-                                      <span>
-                                          {h.highestSequence}{" "}
-                                          {h.highestSequence === 1
-                                              ? `dia`
-                                              : `dias`}
-                                      </span>
-                                  </div>
-                              </div>
-                              <button
-                                  onClick={() => toggleHabit(h.id, h.done)}
-                                  data-test="today-habit-check-btn"
-                              >
-                                  <img src={checkMark} alt="" />
-                              </button>
-                          </TodayItem>
-                      ))
+                        <TodayItem
+                            data-test="today-habit-container"
+                            key={h.id}
+                            done={h.done}
+                            currentSequence={h.currentSequence}
+                            highestSequence={h.highestSequence}
+                        >
+                            <div className="text-container">
+                                <div
+                                    className="title"
+                                    data-test="today-habit-name"
+                                >
+                                    {h.name}
+                                </div>
+                                <div
+                                    className="current"
+                                    data-test="today-habit-sequence"
+                                >
+                                    Sequência atual:{" "}
+                                    <span>
+                                        {h.currentSequence}{" "}
+                                        {h.currentSequence === 1
+                                            ? `dia`
+                                            : `dias`}
+                                    </span>
+                                </div>
+                                <div
+                                    className="record"
+                                    data-test="today-habit-record"
+                                >
+                                    Seu recorde:{" "}
+                                    <span>
+                                        {h.highestSequence}{" "}
+                                        {h.highestSequence === 1
+                                            ? `dia`
+                                            : `dias`}
+                                    </span>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => toggleHabit(h.id, h.done)}
+                                data-test="today-habit-check-btn"
+                            >
+                                <img src={checkMark} alt="" />
+                            </button>
+                        </TodayItem>
+                    ))
                     : "..."}
             </TodayList>
         </TodayContainer>
@@ -195,9 +192,9 @@ const TodayItem = styled.div`
     }
     .record span {
         color: ${(props) =>
-            props.done && props.currentSequence === props.highestSequence
-                ? "#8FC549"
-                : "#666666"};
+        props.done && props.currentSequence === props.highestSequence
+            ? "#8FC549"
+            : "#666666"};
     }
 
     button {
@@ -214,8 +211,8 @@ const TodayInfo = styled.div`
     text-transform: capitalize;
 `;
 
-const TodayProgress = styled.div`
-    color: ${(props) => (props.pctFeitos > 0 ? "#8FC549" : "#bababa")};
+const ProgressInfo = styled.div`
+    color: ${(props) => (props.dayProgress > 0 ? "#8FC549" : "#bababa")};
     font-size: 18px;
     line-height: 30px;
 `;

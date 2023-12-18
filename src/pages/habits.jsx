@@ -9,7 +9,7 @@ import HabitDays from "../components/habit_days.jsx";
 
 export default function Habits() {
     const { userData, setUserData } = useContext(UserContext);
-    const [criandoNovo, setCriando] = useState(false);
+    const [newHabitFormOpen, setFormOpen] = useState(false);
     const [newName, setNewName] = useState("");
     const [newHabitDays, setNewDays] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ export default function Habits() {
     }, []);
 
     function clickFunc() {
-        setCriando(false);
+        setFormOpen(false);
         setNewName("");
         setNewDays([]);
     }
@@ -102,7 +102,7 @@ export default function Habits() {
                 <span>Meus hábitos</span>
                 <button
                     className="new-habit"
-                    onClick={() => setCriando(true)}
+                    onClick={() => setFormOpen(true)}
                     data-test="habit-create-btn"
                 >
                     <img src={plusSymbol} alt="mais" />
@@ -110,7 +110,7 @@ export default function Habits() {
             </PageTitle>
 
             <HabitsList>
-                {criandoNovo && (
+                {newHabitFormOpen && (
                     <NewHabitForm data-test="habit-create-container">
                         <input
                             data-test="habit-name-input"
