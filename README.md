@@ -22,6 +22,26 @@ https://projeto11-trackit-mu-sable.vercel.app/
 
 5. Rode o programa com `npm run dev` e abra o endereço do Local indicado no terminal (ou digite "O");
 
+## Como rodar usando Docker
+
+1. Instale o Docker seguindo a documentação: <br>
+https://docs.docker.com/desktop/
+
+2. Abra o terminal e puxe a imagem no Docker Hub: <br>
+`docker pull face2face/trackit:latest`
+
+3. Execute a imagem localmente:<br>
+`docker run -d -p 8080:80 face2face/trackit:latest`
+
+4. Acesse a aplicação em `http://localhost:8080`
+
+5. Para encerrar, encontre o ID do container:
+`docker ps`<br>
+
+6. Com o ID, execute os comandos:<br>
+`docker stop <container_id>`<br>
+`docker rm <container_id>`<br>
+
 ## Como funciona
 ### Página inicial
 - Tela de login com campos de email e senha;
