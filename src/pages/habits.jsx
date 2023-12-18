@@ -44,7 +44,7 @@ export default function Habits() {
 
     function createNew() {
         setLoading(true);
-        if (newName === "" || newHabitDays.days.length === 0) {
+        if (newName === "" || newHabitDays.length === 0) {
             alert("Complete as informações do novo hábito.");
             setLoading(false);
             return;

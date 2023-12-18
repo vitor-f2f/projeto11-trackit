@@ -7,7 +7,7 @@ import UserContext from "../UserContext";
 
 export default function NavBar() {
     const { userData } = useContext(UserContext);
-    const donepct = userData.donepct || 0;
+    const dayProgress = userData.dayProgress || 0;
 
     return (
         <>
@@ -23,7 +23,7 @@ export default function NavBar() {
                     <Link to={`/hoje`} data-test="today-link">
                         <ProgBar>
                             <CircularProgressbar
-                                value={donepct}
+                                value={dayProgress}
                                 text="Hoje"
                                 strokeWidth={10}
                                 styles={{
