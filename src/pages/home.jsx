@@ -24,7 +24,6 @@ export default function HomePage() {
         setLoading(true);
         loginInfo.email = userEmail;
         loginInfo.password = userPass;
-        console.log(loginInfo);
         const promise = axios.post(`${apiUrl}/auth/login`, loginInfo);
         promise
             .then((res) => {

@@ -41,25 +41,19 @@ export default function Habits() {
         setNewName("");
         setNewDays([]);
     }
-    const newHabitObj = {
-        name: "",
-        days: [],
-    };
+
     function createNew() {
         setLoading(true);
-        newHabitObj.name = newName;
-        newHabitObj.days = newHabitDays;
-        if (newHabitObj.name == "" || newHabitObj.days.length == 0) {
+        if (newName === "" || newHabitDays.days.length === 0) {
             alert("Complete as informações do novo hábito.");
             setLoading(false);
             return;
         }
-
-        const promise = axios.post(
-            `${apiUrl}/habits`,
-            newHabitObj,
-            tokenObj
-        );
+        const newHabitObj = {
+            name: newName,
+            days: newHabitDays,
+        };
+        const promise = axios.post(`${apiUrl}/habits`, newHabitObj, tokenObj);
         promise
             .then(() => {
                 setLoading(false);
@@ -76,10 +70,7 @@ export default function Habits() {
 
     function deleteHabit(id) {
         if (window.confirm("Tem certeza de que quer deletar este hábito?")) {
-            const promise = axios.delete(
-                `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
-                tokenObj
-            );
+            const promise = axios.delete(`${apiUrl}/habits/${id}`, tokenObj);
             promise
                 .then(() => {
                     requestHabits();
