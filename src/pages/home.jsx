@@ -7,6 +7,7 @@ import axios from "axios";
 import UserContext from "../UserContext";
 
 export default function HomePage() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { setUserData } = useContext(UserContext);
     const [userEmail, setEmail] = useState("");
     const [userPass, setPassword] = useState("");
@@ -24,10 +25,7 @@ export default function HomePage() {
         loginInfo.email = userEmail;
         loginInfo.password = userPass;
         console.log(loginInfo);
-        const promise = axios.post(
-            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
-            loginInfo
-        );
+        const promise = axios.post(`${apiUrl}/auth/login`, loginInfo);
         promise
             .then((res) => {
                 setLoading(false);
@@ -119,7 +117,7 @@ const FormContainer = styled.div`
     }
     input {
         background-color: ${({ loading }) =>
-            loading === "true" ? "#f2f2f2" : "#ffffff"};
+        loading === "true" ? "#f2f2f2" : "#ffffff"};
         color: ${({ loading }) => (loading === "true" ? "#afafaf" : "#000000")};
         opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         border-color: #d4d4d4;

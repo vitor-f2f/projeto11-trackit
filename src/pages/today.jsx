@@ -7,6 +7,7 @@ import UserContext from "../UserContext";
 import checkMark from "../assets/check.svg";
 
 export default function Today() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { userData, setUserData } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const userToken = userData.userToken;
@@ -16,10 +17,7 @@ export default function Today() {
 
     function requestToday() {
         setLoading(true);
-        const promise = axios.get(
-            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
-            tokenObj
-        );
+        const promise = axios.get(`${apiUrl}/habits/today`, tokenObj);
         promise
             .then((res) => {
                 setLoading(false);
@@ -37,12 +35,7 @@ export default function Today() {
     }, []);
 
     function toggleHabit(habitId, done) {
-        const promise = axios.post(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"
-            }`,
-            {},
-            tokenObj
-        );
+        const promise = axios.post(`${apiUrl}/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, tokenObj);
         promise
             .then((res) => {
                 console.log("Sucesso: ", res.data);

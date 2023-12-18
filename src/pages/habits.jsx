@@ -8,6 +8,7 @@ import deleteBtn from "../assets/dump.svg";
 import HabitDays from "../components/habit_days.jsx";
 
 export default function Habits() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { userData, setUserData } = useContext(UserContext);
     const [newHabitFormOpen, setFormOpen] = useState(false);
     const [newName, setNewName] = useState("");
@@ -19,10 +20,7 @@ export default function Habits() {
     };
 
     function requestHabits() {
-        const promise = axios.get(
-            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
-            tokenObj
-        );
+        const promise = axios.get(`${apiUrl}/habits`, tokenObj);
         promise
             .then((res) => {
                 const allHabitsArr = res.data;
@@ -58,7 +56,7 @@ export default function Habits() {
         }
 
         const promise = axios.post(
-            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+            `${apiUrl}/habits`,
             newHabitObj,
             tokenObj
         );

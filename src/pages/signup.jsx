@@ -6,33 +6,25 @@ import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
 
 export default function SignUp() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [signupEmail, setEmail] = useState("");
     const [signupPass, setPassword] = useState("");
     const [signupImage, setImage] = useState("");
     const [signupName, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
-    const signupInfo = {
-        email: "",
-        name: "",
-        image: "",
-        password: "",
-    };
-
     const navigate = useNavigate();
 
     function requestLogin() {
         setLoading(true);
-        signupInfo.email = signupEmail;
-        signupInfo.password = signupPass;
-        signupInfo.name = signupName;
-        signupInfo.image = signupImage;
-        console.log(signupInfo);
-        const promise = axios.post(
-            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
-            signupInfo
-        );
+        const signupInfo = {
+            email: signupEmail,
+            name: signupName,
+            image: signupImage,
+            password: signupPass
+        }
+
+        const promise = axios.post(`${apiUrl}/auth/sign-up`, signupInfo);
         promise
             .then(() => {
                 setLoading(false);
