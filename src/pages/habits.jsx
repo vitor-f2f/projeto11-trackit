@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import axios from "axios";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
 import UserContext from "../UserContext";
 import plusSymbol from "../assets/plus.svg";
 import deleteBtn from "../assets/dump.svg";
+import HabitDays from "../components/habit_days.jsx";
 
 export default function Habits() {
     const { userData, setUserData } = useContext(UserContext);
@@ -39,16 +38,6 @@ export default function Habits() {
         requestHabits();
     }, []);
 
-    const diaLetra = ["D", "S", "T", "Q", "Q", "S", "S"];
-
-    function selectDays(day) {
-        if (newHabitDays.includes(day)) {
-            setNewDays(newHabitDays.filter((id) => id !== day));
-        } else {
-            setNewDays([...newHabitDays, day]);
-        }
-    }
-
     function clickFunc() {
         setCriando(false);
         setNewName("");
@@ -62,7 +51,6 @@ export default function Habits() {
         setLoading(true);
         newHabitObj.name = newName;
         newHabitObj.days = newHabitDays;
-        console.log("userData pre-criacao: ", userData);
         if (newHabitObj.name == "" || newHabitObj.days.length == 0) {
             alert("Complete as informações do novo hábito.");
             setLoading(false);
@@ -79,7 +67,6 @@ export default function Habits() {
                 setLoading(false);
                 clickFunc();
                 requestHabits();
-                console.log("userData pos-criacao: ", userData);
                 return;
             })
             .catch((error) => {
@@ -133,19 +120,7 @@ export default function Habits() {
                             onChange={(event) => setNewName(event.target.value)}
                             disabled={loading}
                         />
-                        <HabitsDays>
-                            {[0, 1, 2, 3, 4, 5, 6].map((n) => (
-                                <Day
-                                    key={n}
-                                    active={newHabitDays.includes(n)}
-                                    onClick={() => selectDays(n)}
-                                    data-test="habit-day"
-                                    disabled={loading}
-                                >
-                                    {diaLetra[n]}
-                                </Day>
-                            ))}
-                        </HabitsDays>
+                        <HabitDays activeDays={newHabitDays} setNewDays={setNewDays} loading={loading} />
                         <NewHabitButtons>
                             <button
                                 className="cancel"
@@ -180,17 +155,7 @@ export default function Habits() {
                             <div className="title" data-test="habit-name">
                                 {h.name}
                             </div>
-                            <HabitsDays>
-                                {[0, 1, 2, 3, 4, 5, 6].map((n) => (
-                                    <Day
-                                        key={n}
-                                        active={h.days.includes(n)}
-                                        data-test="habit-day"
-                                    >
-                                        {diaLetra[n]}
-                                    </Day>
-                                ))}
-                            </HabitsDays>
+                            <HabitDays activeDays={h.days} />
                             <button
                                 className="delete"
                                 data-test="habit-delete-btn"
@@ -252,7 +217,7 @@ const NewHabitForm = styled.div`
     margin-bottom: 25px;
     input {
         background-color: ${({ loading }) =>
-            loading === "true" ? "#f2f2f2" : "#ffffff"};
+        loading === "true" ? "#f2f2f2" : "#ffffff"};
         color: ${({ loading }) => (loading === "true" ? "#afafaf" : "#000000")};
         opacity: ${({ loading }) => (loading === "true" ? "0.7" : "1")};
         border-color: #d4d4d4;
@@ -319,22 +284,4 @@ const HabitsItem = styled.div`
         background-color: none;
         cursor: pointer;
     }
-`;
-
-const HabitsDays = styled.div`
-    display: flex;
-    gap: 4px;
-`;
-
-const Day = styled.div`
-    width: 28px;
-    height: 28px;
-    color: ${(props) => (props.active ? "#ffffff" : "#d4d4d4")};
-    background-color: ${(props) => (props.active ? "#cfcfcf" : "#ffffff")};
-    border: 1px solid ${(props) => (props.active ? "#cfcfcf" : "#d4d4d4")};
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
 `;

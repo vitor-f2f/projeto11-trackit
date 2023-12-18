@@ -34,7 +34,7 @@ export default function SignUp() {
             signupInfo
         );
         promise
-            .then((res) => {
+            .then(() => {
                 setLoading(false);
                 navigate("/");
             })
