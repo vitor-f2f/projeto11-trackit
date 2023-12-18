@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import React, { useState } from "react";
 import UserContext from "./UserContext";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
@@ -7,8 +6,8 @@ import SignUp from "./pages/signup";
 import Today from "./pages/today";
 import Habits from "./pages/habits";
 import History from "./pages/history";
-import NavBar from "./assets/NavBar.jsx";
-import TopBar from "./assets/TopBar.jsx";
+import NavBar from "./components/NavBar.jsx";
+import TopBar from "./components/TopBar.jsx";
 
 export default function App() {
     const [userData, setUserData] = useState(null);

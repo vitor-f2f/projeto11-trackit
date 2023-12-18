@@ -5,7 +5,7 @@ import axios from "axios";
 import UserContext from "../UserContext";
 import plusSymbol from "../assets/plus.svg";
 import deleteBtn from "../assets/dump.svg";
-import HabitDays from "../components/habit_days.jsx";
+import HabitDays from "../components/HabitDays.jsx";
 
 export default function Habits() {
     const apiUrl = import.meta.env.VITE_API_URL;

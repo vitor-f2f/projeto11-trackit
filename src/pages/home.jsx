@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
